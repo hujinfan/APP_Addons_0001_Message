@@ -13,14 +13,33 @@ public class MainActivity extends AppCompatActivity {
     private Button mButton;
     private final String TAG = "MessageTest";
     private int ButtonCount = 0;
-    private Thread mThread;
+    private Thread myThread;
+    private MyThread myThread2;
 
     class MyRunnable implements Runnable {
-        public void run (){
+                public void run (){
+                    int count = 0;
+            for(;;)
+            {
+                Log.d(TAG, "MyThread "+count);
+                count++;
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    class MyThread extends Thread{
+        @Override
+        public void run() {
+            super.run();
             int count = 0;
             for(;;)
             {
-                Log.d(TAG, "MyThread"+count);
+                Log.d(TAG, "MyThread2 "+count);
                 count++;
                 try {
                     Thread.sleep(3000);
@@ -33,22 +52,25 @@ public class MainActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreate(Bundle savedInstanceState){
+                super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mButton = (Button)findViewById(R.id.button);//找到控件
+        mButton = (Button) findViewById(R.id.button);//找到控件
         /*添加响应函数*/
-        mButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // Perform action on click
-                Log.d(TAG, "Send Message"+ ButtonCount);
+                mButton.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        // Perform action on click
+                        Log.d(TAG, "Send Message "+ ButtonCount);
                 ButtonCount++;
             }
         });
 
-        mThread = new Thread(new MyRunnable(),"MessageTestThread");
-        mThread.start();
+        myThread = new Thread(new MyRunnable(),"MessageTestThread");
+        myThread.start();
+
+        myThread2 = new MyThread();
+        myThread2.start();
 
     }
 
