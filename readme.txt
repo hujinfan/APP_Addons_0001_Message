@@ -21,3 +21,10 @@ Ctrl+O 复写类成员（函数）
 3.git tag v3
 4.git push -u origin master
 5.git push origin --tags
+
+版本4：支持消息处理
+1.git add -A
+2.git commit -m "v4, support Message"
+3.git tag v4
+4.git push -u origin master
+5.git push origin --tags
