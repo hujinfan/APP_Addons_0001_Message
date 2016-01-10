@@ -13,6 +13,24 @@ public class MainActivity extends AppCompatActivity {
     private Button mButton;
     private final String TAG = "MessageTest";
     private int ButtonCount = 0;
+    private Thread mThread;
+
+    class MyRunnable implements Runnable {
+        public void run (){
+            int count = 0;
+            for(;;)
+            {
+                Log.d(TAG, "MyThread"+count);
+                count++;
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +46,9 @@ public class MainActivity extends AppCompatActivity {
                 ButtonCount++;
             }
         });
+
+        mThread = new Thread(new MyRunnable(),"MessageTestThread");
+        mThread.start();
 
     }
 
