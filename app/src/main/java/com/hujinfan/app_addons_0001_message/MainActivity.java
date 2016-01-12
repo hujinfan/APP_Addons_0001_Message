@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.util.Log;
+import android.os.HandlerThread;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,7 +21,8 @@ public class MainActivity extends AppCompatActivity {
     private MyThread myThread2;
     private Handler mHandler;
     private int mMessageCount = 0;
-
+    private HandlerThread myThread3;
+    private Handler mHandler3;
     class MyRunnable implements Runnable {
                 public void run (){
                     int count = 0;
@@ -41,11 +43,11 @@ public class MainActivity extends AppCompatActivity {
         private Looper mLooper;
         @Override
         public void run() {
-            super.run();
-            Looper.prepare();
-            synchronized (this) {
-                mLooper = Looper.myLooper();
-                notifyAll();
+                super.run();
+                Looper.prepare();
+                synchronized (this) {
+                    mLooper = Looper.myLooper();
+                    notifyAll();
             }
             Looper.loop();
         }
@@ -85,6 +87,14 @@ public class MainActivity extends AppCompatActivity {
                         /*通过主线程来发送消息--点击button*/
                         Message msg = new Message();
                         mHandler.sendMessage(msg);
+
+                        mHandler3.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Log.d(TAG, "get Message for Thread3 " + mMessageCount);
+                                mMessageCount++;
+                            }
+                        });
                     }
                 });
 
@@ -93,15 +103,18 @@ public class MainActivity extends AppCompatActivity {
 
         myThread2 = new MyThread();
         myThread2.start();
-
         mHandler = new Handler(myThread2.getLooper(), new Handler.Callback(){
             @Override
             public boolean handleMessage(Message msg) {
-                Log.d(TAG, "get Message " + mMessageCount);
+                Log.d(TAG, "get Message for Thread2 " + mMessageCount);
                 mMessageCount++;
                 return false;
             }
         });
+
+        myThread3 = new HandlerThread("MessageTestThread3");
+        myThread3.start();
+        mHandler3 = new Handler(myThread3.getLooper());
 
     }
 

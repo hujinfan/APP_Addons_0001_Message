@@ -28,3 +28,10 @@ Ctrl+O 复写类成员（函数）
 3.git tag v4
 4.git push -u origin master
 5.git push origin --tags
+
+版本4：使用HandlerThread这个类
+1.git add -A
+2.git commit -m "v5, use HandlerThread"
+3.git tag v5
+4.git push -u origin master
+5.git push origin --tags
